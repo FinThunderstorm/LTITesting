@@ -13,14 +13,16 @@ services:
       - 3000:3000
     container_name: toskaboiler_dev
   db:
-    image: postgres:13.2
+    image: mongo:latest
     container_name: toskaboiler_db
-    environment:
-      - PGDATA=/data
-      - POSTGRES_PASSWORD=postgres
     volumes:
-      - pg_data:/data
+      - mongodata:/data/db/
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
 
 volumes:
   nodemod:
-  pg_data:
+  mongodata:
+

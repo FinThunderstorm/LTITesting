@@ -1,31 +1,65 @@
 require('dotenv').config()
-require('express-async-errors')
-
 const path = require('path')
-const express = require('express')
-const errorHandler = require('./middlewares/errorHandler')
-const shibbolethCharsetMiddleware = require('./middlewares/shibbolethCharsetMiddleware')
-const { PORT, IN_PRODUCTION } = require('./config')
-const logger = require('./utils/logger')
+const routes = require('./routes')
 
-const app = express()
+const cors = require('cors')
+const morgan = require('morgan')
 
-app.use(express.json())
-app.use(shibbolethCharsetMiddleware)
+const lti = require('ltijs').Provider
 
-app.use('/api', (req, res, next) => require('./routes')(req, res, next)) // eslint-disable-line
-app.use('/api', (_, res) => res.sendStatus(404))
+// Setup
+lti.setup('lti-key',
+{
+  url: 'mongodb://toskaboiler_db/database?authSource=admin',
+  connection: { user: 'root', pass: 'example' }
+}, {
+    staticPath: path.join(__dirname, '../../public'), // Path to static files
+    cookies: {
+      secure: false, // Set secure to true if the testing platform is in a different domain and https is being used
+      sameSite: 'None' // Set sameSite to 'None' if the testing platform is in a different domain and https is being used
+    },
+    devMode: true // Set DevMode to true if the testing platform is in a different domain and https is not being used
+  })
 
-if (IN_PRODUCTION) {
-  const DIST_PATH = path.resolve(__dirname, '../../build')
-  const INDEX_PATH = path.resolve(DIST_PATH, 'index.html')
+// When receiving successful LTI launch redirects to app
+lti.onConnect(async (token, req, res) => {
+  console.log('Testing')
+  return res.sendFile(path.join(__dirname, '../../public/index.html'))
+})
 
-  app.use(express.static(DIST_PATH))
-  app.get('*', (req, res) => res.sendFile(INDEX_PATH))
+// // When receiving deep linking request redirects to deep screen
+lti.onDeepLinking(async (token, req, res) => {
+  return lti.redirect(res, '/deeplink', { newResource: true })
+})
+
+// Setting up routes
+morgan.token('body', (req) => { return JSON.stringify(req.body) })
+
+
+lti.app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body', {
+  //skip: (req,res) => { return res.statusCode === 400 }
+}))
+
+lti.app.use(routes)
+
+// Setup function
+const setup = async () => {
+  const tottodoo = await lti.deploy({ port: 3000 })
+  console.log('ää', tottodoo)
+  
+
+  /**
+   * Register platform
+   */
+  await lti.registerPlatform({
+    url: 'http://localhost:8000',
+    name: 'devmoodle',
+    clientId: '9GgWUljDiMMId1G',
+    authenticationEndpoint: 'http://localhost:8000/mod/lti/auth.php',
+    accesstokenEndpoint: 'http://localhost:8000/mod/lti/token.php',
+    authConfig: { method: 'JWK_SET', key: 'http://localhost:8000/mod/lti/certs.php' }
+  })
+
 }
 
-app.use(errorHandler)
-
-app.listen(PORT, () => {
-  logger.info(`Started on port ${PORT}`)
-})
+setup()
