@@ -4,7 +4,7 @@ import { Typography, Link, Card, CardContent, Button } from '@mui/material'
 const Home = () => (
   <>
     <Typography component="h1" variant="h4" mb={2}>
-      Hello world!
+      Hello world! :D
     </Typography>
     <Card>
       <CardContent>
