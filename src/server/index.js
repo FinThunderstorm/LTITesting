@@ -59,6 +59,14 @@ const setup = async () => {
     accesstokenEndpoint: 'https://moodle.paaryna.fi/mod/lti/token.php',
     authConfig: { method: 'JWK_SET', key: 'https://moodle.paaryna.fi/mod/lti/certs.php' }
   })
+  await lti.registerPlatform({
+    url: 'http://localhost:8000',
+    name: 'http://localhost:8000',
+    clientId: 'N0GlZCDkvXsqBuu',
+    authenticationEndpoint: 'https://localhost:8000/mod/lti/auth.php',
+    accesstokenEndpoint: 'https://localhost:8000/mod/lti/token.php',
+    authConfig: { method: 'JWK_SET', key: 'http://localhost:8000/mod/lti/certs.php' }
+  })
 
 }
 

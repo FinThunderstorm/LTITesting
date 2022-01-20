@@ -15,10 +15,11 @@ const Home = () => (
           GitHub
         </Link>
         .
-
         <form action="/grade" method="POST">
+          <Typography component="h4" variant="h4" mb={2}>
+            Testing grading:
+          </Typography>
           <Button type="submit">Grade</Button>
-
         </form>
       </CardContent>
     </Card>
