@@ -1,5 +1,5 @@
 import React from 'react'
-import { Typography, Link, Card, CardContent } from '@mui/material'
+import { Typography, Link, Card, CardContent, Button } from '@mui/material'
 
 const Home = () => (
   <>
@@ -15,6 +15,11 @@ const Home = () => (
           GitHub
         </Link>
         .
+
+        <form action="/grade" method="POST">
+          <Button type="submit">Grade</Button>
+
+        </form>
       </CardContent>
     </Card>
   </>

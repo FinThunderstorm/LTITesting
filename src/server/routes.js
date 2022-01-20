@@ -1,6 +1,9 @@
 const router = require('express').Router()
 const path = require('path')
 
+const messages = require('./controllers/messagesController')
+
+
 // Requiring Ltijs
 const lti = require('ltijs').Provider
 
@@ -116,6 +119,12 @@ router.get('/info', async (req, res) => {
 
   return res.send(info)
 })
+
+router.get('/api/messages', messages.getAll)
+router.post('/api/messages', messages.create)
+router.get('/api/messages/:id', messages.getOne)
+router.put('/api/messages/:id', messages.update)
+router.delete('/api/messages/:id', messages.destroy)
 
 // Wildcard route to deal with redirecting to React routes
 router.get('*', (req, res) => res.sendFile(path.join(__dirname, '../public/index.html')))

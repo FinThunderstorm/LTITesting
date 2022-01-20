@@ -52,12 +52,12 @@ const setup = async () => {
    * Register platform
    */
   await lti.registerPlatform({
-    url: 'http://localhost:8000',
-    name: 'devmoodle',
-    clientId: '9GgWUljDiMMId1G',
-    authenticationEndpoint: 'http://localhost:8000/mod/lti/auth.php',
-    accesstokenEndpoint: 'http://localhost:8000/mod/lti/token.php',
-    authConfig: { method: 'JWK_SET', key: 'http://localhost:8000/mod/lti/certs.php' }
+    url: 'https://moodle.paaryna.fi',
+    name: 'https://moodle.paaryna.fi',
+    clientId: '8HAsIPwHfshhBer',
+    authenticationEndpoint: 'https://moodle.paaryna.fi/mod/lti/auth.php',
+    accesstokenEndpoint: 'https://moodle.paaryna.fi/mod/lti/token.php',
+    authConfig: { method: 'JWK_SET', key: 'https://moodle.paaryna.fi/mod/lti/certs.php' }
   })
 
 }
