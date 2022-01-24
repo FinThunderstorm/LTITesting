@@ -1,4 +1,6 @@
-# Toskaboiler
+# LTITesting
+
+**LTITesting is a combination of Toskaboiler and LTIJS's demo's in order to try out how LTIJS is working.**
 
 Toskaboiler is a boilerplate for anyone wanting to get a kickstart on mono-repo react - fullstack project. It contains all the parts that are common in toska projects.
 
